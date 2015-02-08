@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,10 +18,15 @@ import java.io.Reader;
 import java.net.Socket;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import Server.Server;
+
+import com.sun.nio.sctp.SendFailedNotification;
 
 public class ChatGui implements Runnable {
 
@@ -29,6 +35,7 @@ public class ChatGui implements Runnable {
 	private Socket connection;
 	private InputStream is;
 	private OutputStream os;
+	public static File file = null;
 
 	public ChatGui(final Socket connection) throws IOException {
 
@@ -39,6 +46,16 @@ public class ChatGui implements Runnable {
 		JFrame window = new JFrame("MSN");
 		JPanel content = new JPanel();
 		JButton buttonSend = new JButton("SEND");
+		JButton buttonFile = new JButton("Send file");
+		buttonFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.showOpenDialog(null);
+			}
+		});
+		
 		display = new JTextArea();
 		// display.setPreferredSize(new Dimension(300, 200));
 		display.setEditable(false);
@@ -56,6 +73,7 @@ public class ChatGui implements Runnable {
 
 		content.add(areaScrollPane);
 		content.add(inputMsg);
+		content.add(buttonFile);
 		content.add(buttonSend);
 
 		window.add(content);
@@ -144,6 +162,5 @@ public class ChatGui implements Runnable {
 		}
 
 	}
-	
 	
 }
